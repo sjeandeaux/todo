@@ -19,6 +19,11 @@ jobs:
               make tools
               make dependencies
       - run:
+          name: Vet and Lint
+          command: |
+              make vet
+              make lint
+      - run:
           name: Test - run the test
           command: |
               make test
@@ -38,11 +43,18 @@ jobs:
               make it-test
       - store_test_results:
           path: ./target/test-results
-      - codecov/upload:
+      - codecov/upload: #CODECOV_TOKEN
           file: ./target/coverage.txt
 
-      - run: docker build -t company/app:$CIRCLE_BRANCH .
-      - run: docker push company/app:$CIRCLE_BRANCH
+      - run:
+          name: Docker - build
+          command: |
+              make docker-build
+      - run:
+          name: Docker - push
+          command: |
+              echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_LOGIN}" --password-stdin
+              make docker-push
 
 
 

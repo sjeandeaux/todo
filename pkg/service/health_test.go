@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 
-	. "github.com/sjeandeaux/ori/pkg/service"
+	. "github.com/sjeandeaux/todo/pkg/service"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/health/grpc_health_v1"
 	"google.golang.org/grpc/status"

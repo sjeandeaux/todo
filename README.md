@@ -1,4 +1,4 @@
-# ori
+# todo
 
 [![CircleCI](https://circleci.com/gh/sjeandeaux/todo.svg?style=svg)](https://circleci.com/gh/sjeandeaux/todo)
 [![codecov](https://codecov.io/gh/sjeandeaux/todo/branch/master/graph/badge.svg)](https://codecov.io/gh/sjeandeaux/todo)
@@ -11,6 +11,13 @@
 * make
 * protoc
 
+
+## CI/CD
+
+
+CODECOV_TOKEN
+DOCKER_LOGIN
+DOCKER_PASSWORD
 
 ## Todos
 

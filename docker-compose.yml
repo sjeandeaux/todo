@@ -23,7 +23,7 @@ services:
     environment:
       *default-env
     networks:
-      - networks_ori
+      - networks_todo
 
   mongo-express:
     image: mongo-express
@@ -33,10 +33,10 @@ services:
     environment:
       *default-env
     networks:
-      - networks_ori
+      - networks_todo
 
-  orid:
-    hostname: orid
+  todod:
+    hostname: todod
     build:
       context: ./
       dockerfile: Dockerfile
@@ -50,7 +50,7 @@ services:
     links:
       - mongo
     networks:
-      - networks_ori
+      - networks_todo
 
 networks:
-  networks_ori:
+  networks_todo:

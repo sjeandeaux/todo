@@ -8,8 +8,8 @@ import (
 
 	"google.golang.org/grpc"
 
-	"github.com/sjeandeaux/ori/pkg/service"
-	pb "github.com/sjeandeaux/ori/todo-grpc/v1"
+	"github.com/sjeandeaux/todo/pkg/service"
+	pb "github.com/sjeandeaux/todo/todo-grpc/v1"
 
 	"google.golang.org/grpc/health/grpc_health_v1"
 

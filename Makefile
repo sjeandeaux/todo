@@ -1,7 +1,8 @@
 BUILD_VERSION=0.0.0
 OWNER=sjeandeaux
-REPO=ori
+REPO=todo
 SRC_DIR=github.com/$(OWNER)/$(REPO)
+
 BUILD_TIME=$(shell date +%Y-%m-%dT%H:%M:%S%z)
 GIT_COMMIT?=$(shell git rev-parse --short HEAD 2> /dev/null || echo "UNKNOWN")
 GIT_DIRTY?=$(shell test -n "`git status --porcelain`" && echo "+CHANGES" || true)
@@ -38,7 +39,7 @@ dependencies: ##Download the dependencies
 .PHONY: build
 build: 	##Build the binary
 	mkdir -p ./target
-	CGO_ENABLED=0 go build $(LDFLAGS) -installsuffix 'static' -o ./target/orid ./cmd/orid/main.go
+	CGO_ENABLED=0 go build $(LDFLAGS) -installsuffix 'static' -o ./target/todod ./cmd/todod/main.go
 
 .PHONY: gocyclo
 gocyclo: ## check cyclomatic
@@ -83,3 +84,9 @@ docker-compose-build: ## builds the application image with docker-compose.
 
 docker-compose-up: ## spawns the containers.
 	VERSION=$(BUILD_VERSION) BUILD_DATE=$(BUILD_TIME) docker-compose up -d
+
+docker-build:
+	docker build --tag $(OWNER)/$(REPO):$(BUILD_VERSION) .
+
+docker-push:
+	docker push $(OWNER)/$(REPO):$(BUILD_VERSION)

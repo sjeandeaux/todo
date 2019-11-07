@@ -8,7 +8,7 @@ import (
 
 	"github.com/golang/protobuf/ptypes/timestamp"
 	log "github.com/sirupsen/logrus"
-	pb "github.com/sjeandeaux/ori/todo-grpc/v1"
+	pb "github.com/sjeandeaux/todo/todo-grpc/v1"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"

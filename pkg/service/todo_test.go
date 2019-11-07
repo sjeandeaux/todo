@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	"github.com/golang/protobuf/ptypes/timestamp"
-	. "github.com/sjeandeaux/ori/pkg/service"
-	pb "github.com/sjeandeaux/ori/todo-grpc/v1"
+	. "github.com/sjeandeaux/todo/pkg/service"
+	pb "github.com/sjeandeaux/todo/todo-grpc/v1"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -95,7 +95,7 @@ var _ = Describe("Todo", func() {
 
 				request := &pb.CreateRequest{
 					ToDo: &pb.ToDo{
-						Title:       "Challenge - ori",
+						Title:       "Challenge - todo",
 						Description: "Should create a micro service with 12factor",
 						Tags:        []string{"golang", "12factor", "k8s"},
 						Reminder:    &timestamp.Timestamp{Seconds: 1573046180},
@@ -107,7 +107,7 @@ var _ = Describe("Todo", func() {
 				Ω(response.GetId()).ShouldNot(BeEmpty())
 
 				expected := &todoInMongo{
-					Title:       "Challenge - ori",
+					Title:       "Challenge - todo",
 					Description: "Should create a micro service with 12factor",
 					Tags:        []string{"golang", "12factor", "k8s"},
 					Reminder:    1573046180,
@@ -126,7 +126,7 @@ var _ = Describe("Todo", func() {
 					Skip("Skip in short mode (need database access)")
 				}
 				id := insert(&todoInMongo{
-					Title:       "Read - Challenge - ori",
+					Title:       "Read - Challenge - todo",
 					Description: "Read - Should create a micro service with 12factor",
 					Tags:        []string{"golang", "12factor", "k8s"},
 					Reminder:    1573046180,
@@ -141,7 +141,7 @@ var _ = Describe("Todo", func() {
 
 				expected := &pb.ToDo{
 					Id:          id,
-					Title:       "Read - Challenge - ori",
+					Title:       "Read - Challenge - todo",
 					Description: "Read - Should create a micro service with 12factor",
 					Tags:        []string{"golang", "12factor", "k8s"},
 					Reminder:    &timestamp.Timestamp{Seconds: 1573046180},
@@ -190,7 +190,7 @@ var _ = Describe("Todo", func() {
 					Skip("Skip in short mode (need database access)")
 				}
 				id := insert(&todoInMongo{
-					Title:       "Should be updated - Challenge - ori",
+					Title:       "Should be updated - Challenge - todo",
 					Description: "Should be updated - New Should create a micro service with 12factor",
 					Tags:        []string{"golang", "12factor", "k8s"},
 					Reminder:    1573046240,
@@ -200,7 +200,7 @@ var _ = Describe("Todo", func() {
 				request := &pb.UpdateRequest{
 					ToDo: &pb.ToDo{
 						Id:          id,
-						Title:       "New Challenge - ori",
+						Title:       "New Challenge - todo",
 						Description: "New Should create a micro service with 12factor",
 						Tags:        []string{"golang", "12factor", "k8s", "ci/cd"},
 						Reminder:    &timestamp.Timestamp{Seconds: 1573046666},
@@ -212,7 +212,7 @@ var _ = Describe("Todo", func() {
 				Ω(response.GetUpdated()).Should(Equal(int64(1)))
 
 				expected := &todoInMongo{
-					Title:       "New Challenge - ori",
+					Title:       "New Challenge - todo",
 					Description: "New Should create a micro service with 12factor",
 					Tags:        []string{"golang", "12factor", "k8s", "ci/cd"},
 					Reminder:    1573046666,
@@ -232,7 +232,7 @@ var _ = Describe("Todo", func() {
 				request := &pb.UpdateRequest{
 					ToDo: &pb.ToDo{
 						Id:          "bad id",
-						Title:       "New Challenge - ori",
+						Title:       "New Challenge - todo",
 						Description: "New Should create a micro service with 12factor",
 						Tags:        []string{"golang", "12factor", "k8s", "ci/cd"},
 						Reminder:    &timestamp.Timestamp{Seconds: 1573046666},
@@ -254,7 +254,7 @@ var _ = Describe("Todo", func() {
 				request := &pb.UpdateRequest{
 					ToDo: &pb.ToDo{
 						Id:          "5dc2d3d4aba443c197307ea2",
-						Title:       "New Challenge - ori",
+						Title:       "New Challenge - todo",
 						Description: "New Should create a micro service with 12factor",
 						Tags:        []string{"golang", "12factor", "k8s", "ci/cd"},
 						Reminder:    &timestamp.Timestamp{Seconds: 1573046666},
@@ -275,7 +275,7 @@ var _ = Describe("Todo", func() {
 					Skip("Skip in short mode (need database access)")
 				}
 				id := insert(&todoInMongo{
-					Title:       "Should be deleted - Challenge - ori",
+					Title:       "Should be deleted - Challenge - todo",
 					Description: "Should be deleted - New Should create a micro service with 12factor",
 					Tags:        []string{"golang", "12factor", "k8s"},
 					Reminder:    1573046240,
@@ -334,7 +334,7 @@ var _ = Describe("Todo", func() {
 					Skip("Skip in short mode (need database access)")
 				}
 				id := insert(&todoInMongo{
-					Title:       "Read - Challenge - ori",
+					Title:       "Read - Challenge - todo",
 					Description: "Read - Should create a micro service with 12factor",
 					Tags:        []string{"golang", "12factor", "k8s"},
 					Reminder:    1573046180,
@@ -351,7 +351,7 @@ var _ = Describe("Todo", func() {
 
 				expected := &pb.ToDo{
 					Id:          id,
-					Title:       "Read - Challenge - ori",
+					Title:       "Read - Challenge - todo",
 					Description: "Read - Should create a micro service with 12factor",
 					Tags:        []string{"golang", "12factor", "k8s"},
 					Reminder:    &timestamp.Timestamp{Seconds: 1573046180},
@@ -370,7 +370,7 @@ var _ = Describe("Todo", func() {
 					Skip("Skip in short mode (need database access)")
 				}
 				insert(&todoInMongo{
-					Title:       "Read - Challenge - ori",
+					Title:       "Read - Challenge - todo",
 					Description: "Read - Should create a micro service with 12factor",
 					Tags:        []string{"golang", "12factor", "k8s"},
 					Reminder:    1573046180,

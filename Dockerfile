@@ -5,7 +5,7 @@ RUN apk --no-cache add ca-certificates make git g++ protobuf protobuf-dev
 ENV GO111MODULE on
 
 #get source
-WORKDIR /go/src/github.com/sjeandeaux/ori
+WORKDIR /go/src/github.com/sjeandeaux/todo
 
 #copy the source
 COPY . .
@@ -35,9 +35,9 @@ LABEL "maintainer"="stephane.jeandeaux@gmail.com" \
       "org.label-schema.build-date"=${BUILD_DATE}
 
 COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
-COPY --from=build /go/src/github.com/sjeandeaux/ori/target/orid /orid
+COPY --from=build /go/src/github.com/sjeandeaux/todo/target/todod /todod
 COPY --from=build /go/bin/grpc-health-probe /grpc-health-probe
 
 ##TODO add HEALTHCHECK
 EXPOSE 8080
-ENTRYPOINT ["/orid"]
+ENTRYPOINT ["/todod"]

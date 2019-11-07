@@ -1,4 +1,4 @@
-module github.com/sjeandeaux/ori
+module github.com/sjeandeaux/todo
 
 go 1.12
 

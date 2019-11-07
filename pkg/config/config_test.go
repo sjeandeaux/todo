@@ -3,7 +3,7 @@ package config_test
 import (
 	"testing"
 
-	. "github.com/sjeandeaux/ori/pkg/config"
+	. "github.com/sjeandeaux/todo/pkg/config"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
