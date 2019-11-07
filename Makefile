@@ -28,6 +28,7 @@ tools: ## download tools
 	go get -u golang.org/x/lint/golint
 	go get -u github.com/fzipp/gocyclo
 	go get -u github.com/golang/protobuf/protoc-gen-go
+	go get -u gotest.tools/gotestsum
 
 
 .PHONY: dependencies
@@ -61,18 +62,18 @@ lint: ## go lint on packages
 
 .PHONY: test
 test: clean fmt vet ## test
-	go test --short -cpu=2 -p=2 -coverprofile=target/coverage.txt -covermode=atomic -v $(LDFLAGS) $(PKGGOFILES)
+	gotestsum --junitfile target/test-results/unit-tests.xml -- --short -cpu=2 -p=2 -coverprofile=target/coverage.txt -covermode=atomic -v $(LDFLAGS) $(PKGGOFILES)
 
 .PHONY: it-test
 it-test: clean fmt vet ## test
-	go test -cpu=2 -p=2 -coverprofile=target/coverage.txt -covermode=atomic -v $(LDFLAGS) $(PKGGOFILES)
+	gotestsum --junitfile target/test-results/it-tests.xml  -- -cpu=2 -p=2 -coverprofile=target/coverage.txt -covermode=atomic -v $(LDFLAGS) $(PKGGOFILES)
 
 cover-html: it-test ## show the coverage in HTML page
 	go tool cover -html=target/coverage.txt
 
 clean: ## clean the target folder
 	@rm -fr target
-	@mkdir target
+	@mkdir -p target/test-results
 
 docker-compose-build: ## builds the application image with docker-compose.
 	VERSION=$(BUILD_VERSION) BUILD_DATE=$(BUILD_TIME) docker-compose build
