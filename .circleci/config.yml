@@ -17,6 +17,7 @@ jobs:
       - run:
           name: Install - requirements
           command: |
+              sudo apt install npm #for coveralls
               make tools
               make dependencies
       - run:
