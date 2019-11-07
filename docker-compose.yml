@@ -16,8 +16,7 @@ x-environment: &default-env
 
 services:
   mongo:
-    build:
-      context: mongo
+    image: mongo
     restart: always
     ports:
       - "27017:27017"
