@@ -48,7 +48,7 @@ jobs:
       - run:
           name: Coveralls
           command: |
-          path_to_lcov: goveralls -coverprofile=./target/coverage.txt -service=circleci -repotoken $COVERALLS_TOKEN
+              goveralls -coverprofile=./target/coverage.txt -service=circleci -repotoken $COVERALLS_TOKEN
 
       - run:
           name: Docker - build
