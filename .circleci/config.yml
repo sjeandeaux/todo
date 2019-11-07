@@ -12,12 +12,6 @@ jobs:
           MONGO_INITDB_DATABASE: challenge
     steps:
       - setup_remote_docker
-      - run:
-          name: Love Boat docker-compose and circleci
-          command: |
-            curl -L https://github.com/docker/compose/releases/download/1.24.1/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
-            chmod +x ~/docker-compose
-            sudo mv ~/docker-compose /usr/local/bin/docker-compose
       - checkout
       - run:
           name: Install - requirements
@@ -46,6 +40,9 @@ jobs:
           path: ./target/test-results
       - codecov/upload:
           file: ./target/coverage.txt
+
+      - run: docker build -t company/app:$CIRCLE_BRANCH .
+      - run: docker push company/app:$CIRCLE_BRANCH
 
 
 
