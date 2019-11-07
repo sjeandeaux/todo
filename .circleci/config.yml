@@ -4,7 +4,7 @@ orbs:
 jobs:
   build:
     docker:
-      - image: circleci/buildpack-deps:latest
+      - image: circleci/golang:1.13.4-alpine
     steps: # TODO we should see explicity the test, integration, ui test results
       - setup_remote_docker
       - run:
@@ -17,6 +17,7 @@ jobs:
       - run:
           name: Install - requirements
           command: |
+              apk --no-cache protobuf protobuf-dev
               make tools
               make dependencies
       - run:
@@ -27,6 +28,13 @@ jobs:
           name: Integration Test - run the integration test
           command: |
               make docker-compose-up
+              for i in `seq 1 10`;
+              do
+                nc -z localhost 27017 && echo Success && exit 0
+                echo -n .
+                sleep 1
+              done
+              echo Failed waiting for Mongo && exit 1
               make it-test
       - codecov/upload:
           file: ./target/coverage.txt
