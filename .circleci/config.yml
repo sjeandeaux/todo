@@ -1,6 +1,7 @@
 version: 2.1
 orbs:
   codecov: codecov/codecov@1.0.2
+  coveralls: coveralls/coveralls@1.0.4
 jobs:
   build:
     docker:
@@ -43,8 +44,10 @@ jobs:
               make it-test
       - store_test_results:
           path: ./target/test-results
-      - codecov/upload: #CODECOV_TOKEN
+      - codecov/upload:
           file: ./target/coverage.txt
+      - coveralls/upload:
+          path_to_lcov: ./target/coverage.txt
 
       - run:
           name: Docker - build
