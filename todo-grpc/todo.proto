@@ -1,0 +1,115 @@
+syntax = "proto3";
+
+package v1;
+option go_package = "todo-grpc/v1";
+
+import "google/protobuf/timestamp.proto";
+
+// ToDo a task to do
+message ToDo {
+    // State of ToDo
+    enum State {
+        NOT_STARTED = 0;
+        IN_PROGRESS = 1;
+        DONE = 2;
+    }
+
+    // Unique ID
+    string id = 1;
+
+    // Title
+    string title = 2;
+
+    // Description
+    string description = 3;
+
+    // Tags on the tasks
+    repeated string tags = 4;
+
+    // Date to remind
+    google.protobuf.Timestamp reminder = 5;
+
+    // State of todo
+    State state = 6;
+
+}
+
+// CreateRequest a request of creation
+message CreateRequest{
+    // The toDo to add
+    ToDo toDo = 1;
+}
+
+// CreateResponse the ID
+message CreateResponse{
+    // ID of created task
+    string id = 1;
+}
+
+// ReadRequest the ID of toDo to read
+message ReadRequest{
+    // ID of toDo
+    string id = 1;
+}
+
+// ReadResponse the todo
+message ReadResponse{
+    // Task entity read by ID
+    ToDo toDo = 1;
+}
+
+// UpdateRequest the todo to update
+message UpdateRequest{
+    // Task entity to update
+    ToDo toDo = 1;
+}
+
+// UpdateResponse the updated todo
+message UpdateResponse{
+    int64 updated = 1;
+}
+
+// DeleteRequest the todo to delete
+message DeleteRequest{
+    // ID of todo
+    string id = 1;
+}
+
+// DeleteResponse the delete response
+message DeleteResponse{
+    int64 deleted = 1;
+}
+
+// SearchRequest the search request
+message SearchRequest{
+    // pattern in description to filter
+    string pattern = 1;
+    // tags to filter
+    repeated string tags = 2;
+    // states to filter if empty all the state
+    repeated ToDo.State states = 3;
+}
+
+// SearchResponse the todos
+message SearchResponse{
+    // List of Todos
+    repeated ToDo toDos = 1;
+}
+
+// ToDoService manage the todo list
+service ToDoService {
+    // Create new todo
+    rpc Create(CreateRequest) returns (CreateResponse);
+
+    // Read the todo
+    rpc Read(ReadRequest) returns (ReadResponse);
+
+    // Update a todo
+    rpc Update(UpdateRequest) returns (UpdateResponse);
+
+    // Delete a todo
+    rpc Delete(DeleteRequest) returns (DeleteResponse);
+
+    // Search a todos
+    rpc Search(SearchRequest) returns (SearchResponse);
+}
