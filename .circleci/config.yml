@@ -17,7 +17,6 @@ jobs:
       - run:
           name: Install - requirements
           command: |
-              sudo apt install npm #for coveralls
               make tools
               make dependencies
       - run:
@@ -47,8 +46,10 @@ jobs:
           path: ./target/test-results
       - codecov/upload:
           file: ./target/coverage.txt
-      - coveralls/upload:
-          path_to_lcov: ./target/coverage.txt
+      - run:
+          name: Coveralls
+          command: |
+          path_to_lcov: goveralls -coverprofile=./target/coverage.txt -service=circleci -repotoken $COVERALLS_TOKEN
 
       - run:
           name: Docker - build

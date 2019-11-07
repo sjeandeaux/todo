@@ -30,6 +30,8 @@ tools: ## download tools
 	go get -u github.com/fzipp/gocyclo
 	go get -u github.com/golang/protobuf/protoc-gen-go
 	go get -u gotest.tools/gotestsum
+	go get golang.org/x/tools/cmd/cover
+	go get github.com/mattn/goveralls
 
 
 .PHONY: dependencies
