@@ -75,7 +75,7 @@ clean: ## clean the target folder
 	@mkdir target
 
 docker-compose-build: ## builds the application image with docker-compose.
-	docker-compose -f docker-compose.yml -f docker-compose-dev.yml build
+	VERSION=$(BUILD_VERSION) BUILD_DATE=$(BUILD_TIME) docker-compose build
 
 docker-compose-up: ## spawns the containers.
 	VERSION=$(BUILD_VERSION) BUILD_DATE=$(BUILD_TIME) docker-compose up -d

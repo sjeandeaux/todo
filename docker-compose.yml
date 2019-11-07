@@ -35,5 +35,22 @@ services:
     networks:
       - networks_ori
 
+  orid:
+    hostname: orid
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      args:
+        VERSION: ${VERSION}
+        BUILD_DATE: ${BUILD_DATE}
+      target: release
+    tty: true
+    ports:
+      - 8080:8080
+    links:
+      - mongo
+    networks:
+      - networks_ori
+
 networks:
   networks_ori:

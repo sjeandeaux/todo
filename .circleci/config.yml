@@ -25,7 +25,7 @@ jobs:
           command: |
               make test
       - run:
-          name: Integration Test - run the integration test
+          name: Waiting - Backend
           command: |
               for i in `seq 1 10`;
               do
@@ -34,6 +34,9 @@ jobs:
                 sleep 10
               done
               echo Failed waiting for Mongo && exit 1
+      - run:
+          name: Integration Test - run the integration test
+          command: |
               make it-test
       - codecov/upload:
           file: ./target/coverage.txt
