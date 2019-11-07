@@ -75,10 +75,10 @@ clean: ## clean the target folder
 	@mkdir target
 
 docker-compose-build: ## builds the application image with docker-compose.
-	docker-compose build $(BUILD_ARGS)
+	docker-compose -f docker-compose.yml -f docker-compose-dev.yml build
 
 docker-compose-up: ## spawns the containers.
-	VERSION=$(VERSION) BUILD_DATE=$(BUILD_DATE) docker-compose up
+	VERSION=$(BUILD_VERSION) BUILD_DATE=$(BUILD_TIME) docker-compose up -d
 
 generate: ## generate the go from protobuf
 	protoc --go_out=plugins=grpc:. todo-grpc/*.proto

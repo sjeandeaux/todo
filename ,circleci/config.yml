@@ -1,0 +1,30 @@
+version: 2.1
+orbs:
+  codecov: codecov/codecov@1.0.2
+jobs:
+  build:
+    docker:
+      - image: circleci/buildpack-deps:latest
+    steps: # TODO we should see explicity the test, integration, ui test results
+      - setup_remote_docker
+      - run:
+          name: Love Boat docker-compose and circleci
+          command: |
+            curl -L https://github.com/docker/compose/releases/download/1.23.2/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
+            chmod +x ~/docker-compose
+            sudo mv ~/docker-compose /usr/local/bin/docker-compose
+      - checkout
+      - run:
+          name: Test - run the test
+          command: |
+              make test
+      - run:
+          name: Integration Test - run the integration test
+          command: |
+              make docker-compose-up
+              make it-test
+      - codecov/upload:
+          file: ./target/coverage.txt
+
+
+

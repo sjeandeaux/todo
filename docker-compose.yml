@@ -1,19 +1,7 @@
 version: '3.7'
 
-x-args:
-  &default-args
-  HTTP_PROXY: ${HTTP_PROXY}
-  HTTPS_PROXY: ${HTTPS_PROXY}
-  NO_PROXY: ${NO_PROXY}
-  http_proxy: ${HTTP_PROXY}
-  https_proxy: ${HTTPS_PROXY}
-  no_proxy: ${NO_PROXY}
-
 
 x-environment: &default-env
-    << : *default-args
-    VERSION: ${VERSION}
-    BUILD_DATE: ${BUILD_DATE}
     MONGO_INITDB_ROOT_USERNAME: devroot
     MONGO_INITDB_ROOT_PASSWORD: devroot
     MONGO_INITDB_DATABASE: challenge
@@ -47,24 +35,6 @@ services:
       *default-env
     networks:
       - networks_ori
-
-#  orid:
-#    hostname: orid
-#    build:
-#      context: ./
-#      dockerfile: Dockerfile
-#      args:
-#        << : *default-args
-#      target: release
-#    tty: true
-#    environment:
-#      *default-env
-#    ports:
-#      - 8080:8080
-#    links:
-#      - mongo
-#    networks:
-#      - networks_ori
 
 networks:
   networks_ori:
