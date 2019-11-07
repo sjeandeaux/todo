@@ -41,7 +41,7 @@ services:
       context: ./
       dockerfile: Dockerfile
       args:
-        VERSION: ${VERSION}
+        BUILD_VERSION: ${BUILD_VERSION}
         BUILD_DATE: ${BUILD_DATE}
       target: release
     tty: true

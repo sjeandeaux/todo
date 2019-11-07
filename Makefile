@@ -1,4 +1,3 @@
-BUILD_VERSION=0.0.0
 OWNER=sjeandeaux
 REPO=todo
 SRC_DIR=github.com/$(OWNER)/$(REPO)
@@ -7,6 +6,7 @@ BUILD_TIME=$(shell date +%Y-%m-%dT%H:%M:%S%z)
 GIT_COMMIT?=$(shell git rev-parse --short HEAD 2> /dev/null || echo "UNKNOWN")
 GIT_DIRTY?=$(shell test -n "`git status --porcelain`" && echo "+CHANGES" || true)
 GIT_DESCRIBE?=$(shell git describe --tags --always 2> /dev/null || echo "UNKNOWN")
+BUILD_VERSION?=$(GIT_DESCRIBE)
 BUILD_TIME?=$(shell date +"%Y-%m-%dT%H:%M:%S")
 
 LDFLAGS=-ldflags "\
@@ -80,13 +80,13 @@ generate: ## generate the go from protobuf
 	protoc --go_out=plugins=grpc:. todo-grpc/*.proto
 
 docker-compose-build: ## builds the application image with docker-compose.
-	VERSION=$(BUILD_VERSION) BUILD_DATE=$(BUILD_TIME) docker-compose build
+	BUILD_VERSION=$(BUILD_VERSION) BUILD_DATE=$(BUILD_TIME) docker-compose build
 
 docker-compose-up: ## spawns the containers.
-	VERSION=$(BUILD_VERSION) BUILD_DATE=$(BUILD_TIME) docker-compose up -d
+	BUILD_VERSION=$(BUILD_VERSION) BUILD_DATE=$(BUILD_TIME) docker-compose up -d
 
 docker-build:
-	docker build --tag $(OWNER)/$(REPO):$(BUILD_VERSION) .
+	docker build --tag $(OWNER)/$(REPO):$(GIT_DESCRIBE) .
 
 docker-push:
-	docker push $(OWNER)/$(REPO):$(BUILD_VERSION)
+	docker push $(OWNER)/$(REPO):$(GIT_DESCRIBE)
