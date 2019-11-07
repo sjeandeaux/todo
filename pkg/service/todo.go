@@ -162,10 +162,16 @@ func (s *ToDoServiceServer) Update(ctx context.Context, r *pb.UpdateRequest) (*p
 	}
 	filter := bson.M{keyID: bson.M{"$eq": id}}
 	update := bson.D{
-		primitive.E{Key: "$set", Value: bson.D{primitive.E{Key: keyTitle, Value: r.GetToDo().GetTitle()}}},
-		primitive.E{Key: "$set", Value: bson.D{primitive.E{Key: keyDescription, Value: r.GetToDo().GetDescription()}}},
 		primitive.E{Key: "$set", Value: bson.D{primitive.E{Key: keyTags, Value: r.GetToDo().GetTags()}}},
 		primitive.E{Key: "$set", Value: bson.D{primitive.E{Key: keyState, Value: r.GetToDo().GetState().String()}}},
+	}
+
+	if title := r.GetToDo().GetTitle(); title != "" {
+		update = append(update, primitive.E{Key: "$set", Value: bson.D{primitive.E{Key: keyTitle, Value: r.GetToDo().GetTitle()}}})
+	}
+
+	if description := r.GetToDo().GetDescription(); description != "" {
+		update = append(update, primitive.E{Key: "$set", Value: bson.D{primitive.E{Key: keyDescription, Value: description}}})
 	}
 
 	if reminder := r.GetToDo().GetReminder(); reminder != nil {

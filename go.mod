@@ -37,5 +37,5 @@ require (
 	gopkg.in/yaml.v2 v2.2.5 // indirect
 	gotest.tools v2.2.0+incompatible // indirect
 	gotest.tools/gotestsum v0.4.0 // indirect
-	grpc.go4.org v0.0.0-20170609214715-11d0a25b4919 // indirect
+	grpc.go4.org v0.0.0-20170609214715-11d0a25b4919
 )
