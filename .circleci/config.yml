@@ -31,7 +31,7 @@ jobs:
               do
                 nc -z localhost 27017 && echo Success && exit 0
                 echo -n .
-                sleep 1
+                sleep 3
               done
               echo Failed waiting for Mongo && exit 1
               make it-test
