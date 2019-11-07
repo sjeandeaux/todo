@@ -108,7 +108,7 @@ var _ = Describe("Todo", func() {
 
 				expected := &todoInMongo{
 					Title:       "Challenge - ori",
-					Description: "Should create i want red a micro service with 12factor",
+					Description: "Should create a micro service with 12factor",
 					Tags:        []string{"golang", "12factor", "k8s"},
 					Reminder:    1573046180,
 					State:       pb.ToDo_IN_PROGRESS.String(),
