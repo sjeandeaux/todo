@@ -10,7 +10,7 @@ jobs:
           MONGO_INITDB_ROOT_USERNAME: devroot
           MONGO_INITDB_ROOT_PASSWORD: devroot
           MONGO_INITDB_DATABASE: challenge
-    steps: # TODO we should see explicity the test, integration, ui test results
+    steps:
       - setup_remote_docker
       - run:
           name: Love Boat docker-compose and circleci
@@ -42,7 +42,7 @@ jobs:
           name: Integration Test - run the integration test
           command: |
               make it-test
-      - store_test_results: # Upload test results for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
+      - store_test_results:
           path: ./target/test-results
       - codecov/upload:
           file: ./target/coverage.txt
