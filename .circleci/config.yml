@@ -4,7 +4,7 @@ orbs:
 jobs:
   build:
     docker:
-      - image: circleci/golang:1.13.4-alpine
+      - image: circleci/golang:1.13.4
     steps: # TODO we should see explicity the test, integration, ui test results
       - setup_remote_docker
       - run:
