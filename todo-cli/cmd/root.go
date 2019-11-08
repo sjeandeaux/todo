@@ -9,6 +9,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	grpc "google.golang.org/grpc"
+	"github.com/grpc-ecosystem/go-grpc-prometheus"
 )
 
 type commandLine struct {
@@ -21,7 +22,8 @@ type commandLine struct {
 
 //the client on todo manager
 func (c *commandLine) client() (*client.ToDoManager, error) {
-	cc, err := grpc.Dial(net.JoinHostPort(c.host, c.port), grpc.WithInsecure())
+	cc, err := grpc.Dial(net.JoinHostPort(c.host, c.port), grpc.WithInsecure(), grpc.WithUnaryInterceptor(grpc_prometheus.UnaryClientInterceptor),
+		grpc.WithStreamInterceptor(grpc_prometheus.StreamClientInterceptor))
 	if err != nil {
 		return nil, err
 	}

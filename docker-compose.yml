@@ -29,7 +29,7 @@ services:
     image: mongo-express
     restart: always
     ports:
-      - 8081:8081
+      - 9081:8081
     environment:
       *default-env
     networks:
@@ -49,6 +49,7 @@ services:
       MONGO_HOST: mongo
     ports:
       - 8080:8080
+      - 8081:8081
     links:
       - mongo
     networks:

@@ -40,6 +40,5 @@ COPY --from=build /go/bin/grpc-health-probe /grpc-health-probe
 COPY --from=build /go/src/github.com/sjeandeaux/todo/target/todod /todod
 COPY --from=build /go/src/github.com/sjeandeaux/todo/target/todo-cli /todo-cli
 
-##TODO add HEALTHCHECK
-EXPOSE 8080
+EXPOSE 8080 8081
 ENTRYPOINT ["/todod"]
