@@ -9,7 +9,7 @@ coverage:
     project:
       default:
         enabled: yes
-        target: 90
+        target: 80
 
 
         threshold: null
