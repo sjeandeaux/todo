@@ -109,7 +109,7 @@ The circle ci uses:
 |Factor|Why does it fit|
 |:----------:|:----------:|
 |Codebase|The SCM follows the gitflow pattern. The `master` is for the production, `develop` for the staging. |
-|Dependencies|It uses go mod which manages dependencies|
+|Dependencies|It uses go mod which manages dependencies and helm and it requirements|
 |Config|The `todod` application can be configurated with environmental variables|
 |Backing services|The `todod` service has a resource which is the mongo database and configuration with `MONGO_URL`|
 |Build, release, run|Build: docker image, Release: kubernetes|
@@ -143,3 +143,10 @@ It should use a gateway load-balancer.
 - [ ] better documentation in go
 - [ ] better coverage (ex: cli)
 - [ ] use a proxy
+- [ ] to keep it simple see KO to run go project in kubernetes
+- [ ] Kubernates operator instead of helm chart for mongodb
+
+
+### Quick Notes
+
+kubectl patch pvc -n dev test-mongodb -p '{"metadata":{"finalizers":null}}'

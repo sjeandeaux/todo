@@ -1,0 +1,20 @@
+replicaCount: 1
+image:
+  repository: sjeandeaux/todo
+  tag: 0.2.0
+  pullPolicy: Always
+
+deployment:
+  containerGRPCPort: 8080
+  containerHTTPPort: 8081
+
+service:
+  type: ClusterIP
+  grpcPort: 8080
+  httpPort: 8081
+
+
+mongodb:
+  mongodbUsername: devroot
+  mongodbPassword: devroot
+  mongodbDatabase: challenge

@@ -22,6 +22,10 @@ RUN make test
 FROM base AS build
 RUN make build
 
+RUN GO111MODULE=off go get -u github.com/grpc-ecosystem/grpc-health-probe \
+    && cd /go/src/github.com/grpc-ecosystem/grpc-health-probe \
+    && CGO_ENABLED=0 go build -installsuffix 'static' -o /go/bin/grpc-health-probe .
+
 FROM scratch AS release
 
 ARG BUILD_VERSION=undefined

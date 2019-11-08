@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "ws.fullname" . }}
+  labels:
+    app: {{ template "ws.name" . }}
+    chart: {{ template "ws.chart" . }}
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "ws.name" . }}
+      release: {{ .Release.Name | quote }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "ws.name" . }}
+        release: {{ .Release.Name | quote }}
+    spec:
+      containers:
+      - name: main
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - name: grpc
+          containerPort: {{ .Values.deployment.containerGRPCPort }}
+        - name: http
+          containerPort: {{ .Values.deployment.containerHTTPPort }}
+#        readinessProbe:
+#          exec:
+#            command: ["/grpc_health_probe", "-addr=:8080"]
+#          initialDelaySeconds: 5
+#        livenessProbe:
+#          exec:
+#            command: ["/grpc_health_probe", "-addr=:8080"]
+#          initialDelaySeconds: 10
+        env:
+        - name: MONGO_URL
+          valueFrom:
+            configMapKeyRef:
+              key: MONGO_URL
+              name: {{ .Release.Name }}-config

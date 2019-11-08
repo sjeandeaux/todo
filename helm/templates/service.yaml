@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "ws.fullname" . }}
+  labels:
+    app: {{ template "ws.name" . }}
+    chart: {{ template "ws.chart" . }}
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+  - port: {{ .Values.service.grpcPort }}
+    targetPort: grpc
+    name: grpc
+  - port: {{ .Values.service.httpPort }}
+    targetPort: http
+    name: http
+  selector:
+    app: {{ template "ws.name" . }}
+    release: {{ .Release.Name | quote }}
