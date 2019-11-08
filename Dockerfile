@@ -26,12 +26,15 @@ FROM scratch AS release
 
 ARG BUILD_VERSION=undefined
 ARG BUILD_DATE=undefined
+ARG VCS_REF=undefined
 
 #http://label-schema.org/rc1/
 LABEL "maintainer"="stephane.jeandeaux@gmail.com" \
       "org.label-schema.vendor"="sjeandeaux" \
       "org.label-schema.schema-version"="1.0.0-rc.1" \
       "org.label-schema.applications.todod.version"=${BUILD_VERSION} \
+      "org.label-schema.applications.todo-cli.version"=${BUILD_VERSION} \
+      "org.label-schema.vcs-ref"=$VCS_REF \
       "org.label-schema.build-date"=${BUILD_DATE}
 
 COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/

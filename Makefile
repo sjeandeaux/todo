@@ -89,7 +89,7 @@ docker-compose-up: ## spawns the containers.
 	BUILD_VERSION=$(BUILD_VERSION) BUILD_DATE=$(BUILD_TIME) docker-compose up -d
 
 docker-build:
-	docker build --tag $(OWNER)/$(REPO):$(GIT_DESCRIBE) .
+	docker build --build-arg VCS_REF=$(GIT_COMMIT) --build-arg BUILD_VERSION=$(BUILD_VERSION) --build-arg BUILD_DATE=$(BUILD_TIME) --tag $(OWNER)/$(REPO):$(GIT_DESCRIBE) .
 
 docker-push:
 	docker push $(OWNER)/$(REPO):$(GIT_DESCRIBE)
