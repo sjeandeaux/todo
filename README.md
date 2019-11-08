@@ -125,7 +125,7 @@ The circle ci uses:
 ### Prove how it fits and uses the best cloud native understanding
 
 * Containerized: The application `todod` is deployed in a container.
-* Dynamically orchestrated: A load-balancing (traefik, nginx, ...) can be used above the services of todod.
+* Dynamically orchestrated: A load-balancer (traefik, nginx, ...) can be used above the services of todod.
 * Microservices-oriented: The `todod` application manages todos
 * Statelessness: The `todod` can die. Nothing is lost.
 
@@ -136,4 +136,10 @@ The circle ci uses:
 
 ### How would this service be accessed and used from an external client from the cluster?
 
-IT should use a gateway load-balancing.
+It should use a gateway load-balancer.
+
+## Todos
+
+- [ ] better documentation in go
+- [ ] better coverage (ex: cli)
+- [ ] use a proxy

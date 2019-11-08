@@ -4,7 +4,7 @@ import (
 	"net"
 	"time"
 
-	"github.com/grpc-ecosystem/go-grpc-prometheus"
+	grpc_prometheus "github.com/grpc-ecosystem/go-grpc-prometheus"
 	log "github.com/sirupsen/logrus"
 	"github.com/sjeandeaux/todo/pkg/client"
 	"github.com/spf13/cobra"
@@ -61,6 +61,7 @@ func init() {
 	rootCmd.AddCommand(updateCmd)
 	rootCmd.AddCommand(deleteCmd)
 	rootCmd.AddCommand(searchCmd)
+	rootCmd.AddCommand(versionCmd)
 
 }
 
