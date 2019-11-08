@@ -15,7 +15,7 @@ import (
 )
 
 type commandLine struct {
-	config   service.Config
+	url      string
 	logLevel string
 	host     string
 	grpcPort string
@@ -25,13 +25,7 @@ type commandLine struct {
 var cmdLine = &commandLine{}
 
 func init() {
-	flag.StringVar(&cmdLine.config.Host, "mongo-host", config.LookupEnvOrString("MONGO_HOST", ""), "The mongo host")
-	flag.StringVar(&cmdLine.config.Login, "mongo-login", config.LookupEnvOrString("MONGO_LOGIN", "devroot"), "The mongo login")
-	flag.StringVar(&cmdLine.config.Password, "mongo-password", config.LookupEnvOrString("MONGO_PASSWORD", "devroot"), "The mongo password (it should a secret but out of laziness...")
-	flag.StringVar(&cmdLine.config.Port, "mongo-port", config.LookupEnvOrString("MONGO_POST", "27017"), "The mongo port")
-
-	flag.StringVar(&cmdLine.config.Database, "mongo-database", config.LookupEnvOrString("MONGO_DATABASE", "challenge"), "The database")
-	flag.StringVar(&cmdLine.config.Collection, "mongo-collection", config.LookupEnvOrString("MONGO_COLLECTION", "todo"), "The todo collection")
+	flag.StringVar(&cmdLine.url, "mongo-url", config.LookupEnvOrString("MONGO_URL", "mongodb://localhost:27017@devroot:devroot/?authSource=admin"), "The mongo host")
 
 	flag.StringVar(&cmdLine.host, "host", config.LookupEnvOrString("HOST", "0.0.0.0"), "The grpc host")
 	flag.StringVar(&cmdLine.grpcPort, "grpc-port", config.LookupEnvOrString("GRPC_PORT", "8080"), "The grpc port")
@@ -53,7 +47,7 @@ func main() {
 	log.WithField("data", information.MetaDataValue).Infoln("MetaData")
 
 	ctx := context.Background()
-	todoService, err := service.NewToDoServiceServer(ctx, cmdLine.config)
+	todoService, err := service.NewToDoServiceServer(ctx, cmdLine.url)
 	if err != nil {
 		log.Fatal(err)
 	}

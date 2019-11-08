@@ -16,23 +16,13 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-//Config to connect to database
-type Config struct {
-	Host     string
-	Port     string
-	Login    string
-	Password string
+const (
+	database   = "challenge"
+	collection = "todo"
+)
 
-	Database   string
-	Collection string
-}
-
-func (c *Config) getMongoURI() string {
-	return fmt.Sprintf("mongodb://%s:%s@%s:%s/?authSource=admin", c.Login, c.Password, c.Host, c.Port)
-}
-
-func (c *Config) getMongoClient() (*mongo.Client, error) {
-	return mongo.Connect(context.Background(), options.Client().ApplyURI(c.getMongoURI()))
+func getMongoClient(url string) (*mongo.Client, error) {
+	return mongo.Connect(context.Background(), options.Client().ApplyURI(url))
 }
 
 // ToDoServiceServer manages the todos list
@@ -92,15 +82,15 @@ func (t *todoInMongoWithID) todo() *pb.ToDo {
 var _ pb.ToDoServiceServer = &ToDoServiceServer{}
 
 // NewToDoServiceServer TODO
-func NewToDoServiceServer(ctx context.Context, c Config) (*ToDoServiceServer, error) {
-	client, err := c.getMongoClient()
+func NewToDoServiceServer(ctx context.Context, url string) (*ToDoServiceServer, error) {
+	client, err := getMongoClient(url)
 	if err != nil {
 		return nil, err
 	}
-	database := client.Database(c.Database)
+	database := client.Database(database)
 	return &ToDoServiceServer{
 		client:         client,
-		todoCollection: database.Collection(c.Collection),
+		todoCollection: database.Collection(collection),
 	}, nil
 }
 
@@ -154,7 +144,7 @@ func (s *ToDoServiceServer) Read(ctx context.Context, r *pb.ReadRequest) (*pb.Re
 
 	if err := result.Decode(objMongo); err != nil {
 		if err == mongo.ErrNoDocuments {
-			return nil, nil
+			return &pb.ReadResponse{}, nil
 		}
 		return nil, err
 	}

@@ -49,17 +49,8 @@ var _ = Describe("Todo", func() {
 		Ω(err).NotTo(HaveOccurred())
 		client.Database(databaseName).Collection(collection).Drop(context.TODO())
 
-		config := Config{
-			Host:       "localhost",
-			Port:       "27017",
-			Login:      "devroot",
-			Password:   "devroot",
-			Collection: "todo",
-			Database:   "challenge",
-		}
-
 		//create the server
-		server, err = NewToDoServiceServer(context.TODO(), config)
+		server, err = NewToDoServiceServer(context.TODO(), "mongodb://devroot:devroot@localhost:27017/?authSource=admin")
 		Ω(err).NotTo(HaveOccurred())
 		Ω(server).ShouldNot(BeNil())
 	})
@@ -168,7 +159,7 @@ var _ = Describe("Todo", func() {
 		})
 
 		Context("With an non existing todo", func() {
-			It("should get nohtin", func() {
+			It("should get nothing", func() {
 				if testing.Short() {
 					Skip("Skip in short mode (need database access)")
 				}
@@ -177,7 +168,7 @@ var _ = Describe("Todo", func() {
 				}
 				response, err := server.Read(context.TODO(), request)
 				Ω(err).NotTo(HaveOccurred())
-				Ω(response).Should(BeNil())
+				Ω(response.GetToDo()).Should(BeNil())
 
 			})
 		})

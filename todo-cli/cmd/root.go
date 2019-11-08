@@ -4,12 +4,12 @@ import (
 	"net"
 	"time"
 
+	"github.com/grpc-ecosystem/go-grpc-prometheus"
 	log "github.com/sirupsen/logrus"
 	"github.com/sjeandeaux/todo/pkg/client"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	grpc "google.golang.org/grpc"
-	"github.com/grpc-ecosystem/go-grpc-prometheus"
 )
 
 type commandLine struct {

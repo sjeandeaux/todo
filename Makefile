@@ -35,7 +35,7 @@ tools: ## download tools
 
 
 .PHONY: dependencies
-dependencies: ##Download the dependencies
+dependencies: ## Download the dependencies
 	go mod download
 
 .PHONY: build
@@ -53,7 +53,7 @@ fmt: ## go fmt
 	@go fmt $(PKGGOFILES)
 
 .PHONY: misspell
-misspell: ## go fmt on packages
+misspell: ## gmisspell packages
 	@misspell $(PKGGOFILES)
 
 .PHONY: vet
@@ -69,7 +69,7 @@ test: clean fmt vet ## test
 	gotestsum --junitfile target/test-results/unit-tests.xml -- --short -cpu=2 -p=2 -coverprofile=target/coverage.txt -covermode=atomic -v $(LDFLAGS) $(PKGGOFILES)
 
 .PHONY: it-test
-it-test: clean fmt vet ## test
+it-test: clean fmt vet ## integration test
 	gotestsum --junitfile target/test-results/it-tests.xml  -- -cpu=2 -p=2 -coverprofile=target/coverage.txt -covermode=atomic -v $(LDFLAGS) $(PKGGOFILES)
 
 cover-html: it-test ## show the coverage in HTML page
