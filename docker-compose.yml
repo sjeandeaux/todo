@@ -45,6 +45,8 @@ services:
         BUILD_DATE: ${BUILD_DATE}
       target: release
     tty: true
+    environment:
+      MONGO_HOST: mongo
     ports:
       - 8080:8080
     links:

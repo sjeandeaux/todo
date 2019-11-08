@@ -13,9 +13,10 @@ import (
 )
 
 type commandLine struct {
-	config service.Config
-	host   string
-	port   string
+	config   service.Config
+	logLevel string
+	host     string
+	port     string
 }
 
 var cmdLine = &commandLine{}
@@ -31,10 +32,17 @@ func init() {
 
 	flag.StringVar(&cmdLine.host, "host", config.LookupEnvOrString("HOST", "0.0.0.0"), "The grpc host")
 	flag.StringVar(&cmdLine.port, "port", config.LookupEnvOrString("PORT", "8080"), "The grpc port")
+	flag.StringVar(&cmdLine.logLevel, "log-level", config.LookupEnvOrString("LOG_LEVEL", log.InfoLevel.String()), "Log level")
 	flag.Parse()
 }
 
 func main() {
+	if l, err := log.ParseLevel(cmdLine.logLevel); err == nil {
+		log.SetLevel(l)
+	} else {
+		log.SetLevel(log.InfoLevel)
+	}
+
 	log.Println(information.Print())
 	ctx := context.Background()
 	todoService, err := service.NewToDoServiceServer(ctx, cmdLine.config)

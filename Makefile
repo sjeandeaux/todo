@@ -42,6 +42,7 @@ dependencies: ##Download the dependencies
 build: 	##Build the binary
 	mkdir -p ./target
 	CGO_ENABLED=0 go build $(LDFLAGS) -installsuffix 'static' -o ./target/todod ./todod/main.go
+	CGO_ENABLED=0 go build $(LDFLAGS) -installsuffix 'static' -o ./target/todo-cli ./todo-cli/main.go
 
 .PHONY: gocyclo
 gocyclo: ## check cyclomatic

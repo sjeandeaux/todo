@@ -36,6 +36,7 @@ LABEL "maintainer"="stephane.jeandeaux@gmail.com" \
 
 COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=build /go/src/github.com/sjeandeaux/todo/target/todod /todod
+COPY --from=build /go/src/github.com/sjeandeaux/todo/target/todo-cli /todo-cli
 COPY --from=build /go/bin/grpc-health-probe /grpc-health-probe
 
 ##TODO add HEALTHCHECK

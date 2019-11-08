@@ -51,13 +51,19 @@ const (
 	keyReminder    = "reminder"
 )
 
+//Use in create
 type todoInMongo struct {
-	ID          primitive.ObjectID `bson:"_id"`
 	Title       string
 	Description string
 	Tags        []string
 	Reminder    int64
 	State       string
+}
+
+//Use in read
+type todoInMongoWithID struct {
+	ID   primitive.ObjectID `bson:"_id"`
+	Todo todoInMongo        `bson:"inline"`
 }
 
 func newTodo(r *pb.ToDo) (t todoInMongo) {
@@ -71,14 +77,14 @@ func newTodo(r *pb.ToDo) (t todoInMongo) {
 	return
 }
 
-func (t *todoInMongo) todo() *pb.ToDo {
+func (t *todoInMongoWithID) todo() *pb.ToDo {
 	return &pb.ToDo{
 		Id:          t.ID.Hex(),
-		Title:       t.Title,
-		Description: t.Description,
-		Tags:        t.Tags,
-		State:       pb.ToDo_State(pb.ToDo_State_value[t.State]),
-		Reminder:    &timestamp.Timestamp{Seconds: t.Reminder},
+		Title:       t.Todo.Title,
+		Description: t.Todo.Description,
+		Tags:        t.Todo.Tags,
+		State:       pb.ToDo_State(pb.ToDo_State_value[t.Todo.State]),
+		Reminder:    &timestamp.Timestamp{Seconds: t.Todo.Reminder},
 	}
 }
 
@@ -113,7 +119,11 @@ func (s *ToDoServiceServer) HealthChecher() func() error {
 		}
 		ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 		defer cancel()
-		return s.client.Ping(ctx, nil)
+
+		if err := s.client.Ping(ctx, nil); err != nil {
+			return fmt.Errorf("ping failure %v", err)
+		}
+		return nil
 	}
 }
 
@@ -140,7 +150,7 @@ func (s *ToDoServiceServer) Read(ctx context.Context, r *pb.ReadRequest) (*pb.Re
 	}
 	result := s.todoCollection.FindOne(ctx, bson.M{keyID: id})
 
-	objMongo := &todoInMongo{}
+	objMongo := &todoInMongoWithID{}
 
 	if err := result.Decode(objMongo); err != nil {
 		if err == mongo.ErrNoDocuments {
@@ -232,7 +242,7 @@ func (s *ToDoServiceServer) Search(ctx context.Context, r *pb.SearchRequest) (*p
 	defer cur.Close(ctx)
 	elements := []*pb.ToDo{}
 	for cur.Next(ctx) {
-		var result todoInMongo
+		var result todoInMongoWithID
 		err := cur.Decode(&result)
 		if err != nil {
 			return nil, err

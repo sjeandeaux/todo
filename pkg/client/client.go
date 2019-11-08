@@ -5,11 +5,19 @@ import (
 
 	"github.com/golang/protobuf/ptypes/timestamp"
 	pb "github.com/sjeandeaux/todo/todo-grpc/v1"
+	grpc "google.golang.org/grpc"
 )
 
 //ToDoManager manages your todo
 type ToDoManager struct {
 	Client pb.ToDoServiceClient
+}
+
+// NewToDoManager create a manager of todos
+func NewToDoManager(cc *grpc.ClientConn) *ToDoManager {
+	return &ToDoManager{
+		Client: pb.NewToDoServiceClient(cc),
+	}
 }
 
 // ToDo a todo
