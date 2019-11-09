@@ -16,6 +16,8 @@ import (
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	grpc_logrus "github.com/grpc-ecosystem/go-grpc-middleware/logging/logrus"
 	grpc_prometheus "github.com/grpc-ecosystem/go-grpc-prometheus"
+
+	"google.golang.org/grpc/reflection"
 )
 
 // RunServer runs the grpc server on port port
@@ -49,7 +51,7 @@ func RunServer(ctx context.Context, host string, port string, server *service.To
 			HealthCheck: server.HealthChecher(),
 		}
 		grpc_health_v1.RegisterHealthServer(grpcServer, healthCheck)
-
+		reflection.Register(grpcServer)
 		if err := grpcServer.Serve(lis); err != nil {
 			log.Println(err) //TODO manage the error
 			cancel()
