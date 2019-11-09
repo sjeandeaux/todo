@@ -1,7 +1,7 @@
 replicaCount: 1
 image:
   repository: sjeandeaux/todo
-  tag: 0.2.0
+  tag: 0.3.0-5-g1904ece
   pullPolicy: Always
 
 deployment:
@@ -18,3 +18,8 @@ mongodb:
   mongodbUsername: devroot
   mongodbPassword: devroot
   mongodbDatabase: challenge
+  mongodbPort: 27
+
+# It uses https://github.com/kubernetes/ingress-nginx, you must have a certificate in {{ template "ws.fullname" . }}-secret
+ingress:
+  enabled: true

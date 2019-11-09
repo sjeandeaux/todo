@@ -136,7 +136,7 @@ The circle ci uses:
 
 ### How would this service be accessed and used from an external client from the cluster?
 
-It should use a gateway load-balancer.
+It should use a nodeport, an ingress or a load-balancer.
 
 ## Todos
 
@@ -147,6 +147,48 @@ It should use a gateway load-balancer.
 - [ ] Kubernates operator instead of helm chart for mongodb
 
 
-### Quick Notes
+### Useful command lines
 
+## Minikube
+
+```bash
+# Install the release
+cd helm
+helm del --purge test;
+
+# Force delete mongodb
 kubectl patch pvc -n dev test-mongodb -p '{"metadata":{"finalizers":null}}'
+kubectl delete deployments -n dev test-mongodb test-tododg
+
+# Check the application
+kubectl port-forward svc/test-todod 8080:8080 -n dev
+grpc-health-probe -addr localhost:8080  -rpc-timeout 3s -connect-timeout 5s
+grpc-health-probe -addr test-todod.io:443  -rpc-timeout 3s -connect-timeout 5s
+
+
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout tls.key -out tls.crt -subj "/CN=test-todod.io"
+kubectl create secret tls grpc-secret --key tls.key --cert tls.crt -n dev
+
+
+grpc-health-probe -addr test-todod.io:443 \
+    -tls \
+    -tls-ca-cert tls.crt \
+    -tls-server-name=test-todod.io
+
+kubectl delete deployment -n dev my-nginx-nginx-ingress-controller my-nginx-nginx-ingress-default-backend test-mongodb test-todod
+helm del --purge test
+helm del --purge my-nginx
+
+helm install stable/nginx-ingress --set controller.extraArgs.enable-ssl-passthrough="" --set controller.extraArgs.v="2" --name my-nginx --namespace dev
+helm install --name test --namespace dev .
+
+
+#helm upgrade test --namespace dev .
+
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /tmp/tls.key -out /tmp/tls.crt -subj "/CN=test-todod.io"
+kubectl create secret tls foo-secret --key /tmp/tls.key --cert /tmp/tls.crt
+```
+
+
+
+

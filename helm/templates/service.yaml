@@ -3,19 +3,17 @@ kind: Service
 metadata:
   name: {{ template "ws.fullname" . }}
   labels:
-    app: {{ template "ws.name" . }}
+    k8s-app: {{ template "ws.name" . }}
     chart: {{ template "ws.chart" . }}
     release: {{ .Release.Name | quote }}
     heritage: {{ .Release.Service | quote }}
 spec:
-  type: {{ .Values.service.type }}
+  selector:
+    k8s-app: {{ template "ws.name" . }}
   ports:
   - port: {{ .Values.service.grpcPort }}
-    targetPort: grpc
+    targetPort: {{ .Values.service.grpcPort }}
     name: grpc
   - port: {{ .Values.service.httpPort }}
-    targetPort: http
+    targetPort: {{ .Values.service.httpPort }}
     name: http
-  selector:
-    app: {{ template "ws.name" . }}
-    release: {{ .Release.Name | quote }}

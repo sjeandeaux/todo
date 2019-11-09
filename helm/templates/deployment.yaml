@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: {{ template "ws.fullname" . }}
   labels:
-    app: {{ template "ws.name" . }}
+    k8s-app: {{ template "ws.name" . }}
     chart: {{ template "ws.chart" . }}
     release: {{ .Release.Name | quote }}
     heritage: {{ .Release.Service | quote }}
@@ -11,16 +11,15 @@ spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: {{ template "ws.name" . }}
-      release: {{ .Release.Name | quote }}
+      k8s-app: {{ template "ws.name" . }}
   template:
     metadata:
       labels:
-        app: {{ template "ws.name" . }}
+        k8s-app: {{ template "ws.name" . }}
         release: {{ .Release.Name | quote }}
     spec:
       containers:
-      - name: main
+      - name: {{ template "ws.name" . }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
@@ -28,14 +27,14 @@ spec:
           containerPort: {{ .Values.deployment.containerGRPCPort }}
         - name: http
           containerPort: {{ .Values.deployment.containerHTTPPort }}
-#        readinessProbe:
-#          exec:
-#            command: ["/grpc_health_probe", "-addr=:8080"]
-#          initialDelaySeconds: 5
-#        livenessProbe:
-#          exec:
-#            command: ["/grpc_health_probe", "-addr=:8080"]
-#          initialDelaySeconds: 10
+        readinessProbe:
+          exec:
+            command: ["/grpc_health_probe", "-addr=:8080"]
+          initialDelaySeconds: 5
+        livenessProbe:
+          exec:
+            command: ["/grpc_health_probe", "-addr=:8080"]
+          initialDelaySeconds: 10
         env:
         - name: MONGO_URL
           valueFrom:
