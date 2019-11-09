@@ -25,7 +25,7 @@ type commandLine struct {
 var cmdLine = &commandLine{}
 
 func init() {
-	flag.StringVar(&cmdLine.url, "mongo-url", config.LookupEnvOrString("MONGO_URL", "mongodb://localhost:27017@devroot:devroot/?authSource=admin"), "The mongo host")
+	flag.StringVar(&cmdLine.url, "mongo-url", config.LookupEnvOrString("MONGO_URL", "mongodb://devroot:devroot@localhost:27017/?authSource=admin"), "The mongo host")
 
 	flag.StringVar(&cmdLine.host, "host", config.LookupEnvOrString("HOST", "0.0.0.0"), "The grpc host")
 	flag.StringVar(&cmdLine.grpcPort, "grpc-port", config.LookupEnvOrString("GRPC_PORT", "8080"), "The grpc port")
