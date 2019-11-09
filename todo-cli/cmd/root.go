@@ -22,7 +22,9 @@ type commandLine struct {
 
 //the client on todo manager
 func (c *commandLine) client() (*client.ToDoManager, error) {
-	cc, err := grpc.Dial(net.JoinHostPort(c.host, c.port), grpc.WithInsecure(), grpc.WithUnaryInterceptor(grpc_prometheus.UnaryClientInterceptor),
+	log.Infof("%s:%s", c.host, c.port)
+	cc, err := grpc.Dial(net.JoinHostPort(c.host, c.port), grpc.WithInsecure(), grpc.WithBalancerName("round_robin"),
+		grpc.WithUnaryInterceptor(grpc_prometheus.UnaryClientInterceptor),
 		grpc.WithStreamInterceptor(grpc_prometheus.StreamClientInterceptor))
 	if err != nil {
 		return nil, err
@@ -47,7 +49,7 @@ func init() {
 	cobra.OnInitialize(initConfig)
 	log.SetFormatter(&log.TextFormatter{})
 
-	rootCmd.Flags().StringVarP(&cmdLine.logLevel, "log-level", "l", log.InfoLevel.String(), "The log level")
+	rootCmd.PersistentFlags().StringVarP(&cmdLine.logLevel, "log-level", "l", log.InfoLevel.String(), "The log level")
 	rootCmd.PersistentFlags().StringVarP(&cmdLine.port, "port", "p", "8080", "The port")
 	rootCmd.PersistentFlags().DurationVarP(&cmdLine.timeout, "timeout", "t", 3*time.Second, "The timeout when it calls the daemon")
 	rootCmd.PersistentFlags().StringVarP(&cmdLine.host, "host", "o", "localhost", "The host")
