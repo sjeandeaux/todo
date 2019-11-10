@@ -78,8 +78,8 @@ var _ = Describe("Todo", func() {
 	}
 
 	Describe("Create", func() {
-		Context("With a todo", func() {
-			It("should create one", func() {
+		Context("With a todo payload", func() {
+			It("should create one todo", func() {
 				if testing.Short() {
 					Skip("Skip in short mode (need database access)")
 				}
@@ -111,8 +111,8 @@ var _ = Describe("Todo", func() {
 	})
 
 	Describe("Read", func() {
-		Context("With an existing todo", func() {
-			It("should update it", func() {
+		Context("An existing todo", func() {
+			It("should return it", func() {
 				if testing.Short() {
 					Skip("Skip in short mode (need database access)")
 				}
@@ -144,7 +144,7 @@ var _ = Describe("Todo", func() {
 			})
 		})
 
-		Context("With a bad id", func() {
+		Context("With an inexistant id", func() {
 			It("should fail", func() {
 				if testing.Short() {
 					Skip("Skip in short mode (need database access)")
@@ -158,8 +158,8 @@ var _ = Describe("Todo", func() {
 			})
 		})
 
-		Context("With an non existing todo", func() {
-			It("should get nothing", func() {
+		Context("An non existing todo", func() {
+			It("should return nothing", func() {
 				if testing.Short() {
 					Skip("Skip in short mode (need database access)")
 				}
@@ -175,7 +175,7 @@ var _ = Describe("Todo", func() {
 	})
 
 	Describe("Update", func() {
-		Context("With an existing todo", func() {
+		Context("An existing todo", func() {
 			It("should update it", func() {
 				if testing.Short() {
 					Skip("Skip in short mode (need database access)")
@@ -235,7 +235,7 @@ var _ = Describe("Todo", func() {
 			})
 		})
 
-		Context("With a not found id", func() {
+		Context("With a not existing id", func() {
 			It("should update nothing", func() {
 
 				if testing.Short() {
@@ -260,7 +260,7 @@ var _ = Describe("Todo", func() {
 	})
 
 	Describe("Delete", func() {
-		Context("With an existing todo", func() {
+		Context("An existing todo", func() {
 			It("should delete it", func() {
 				if testing.Short() {
 					Skip("Skip in short mode (need database access)")
@@ -300,7 +300,7 @@ var _ = Describe("Todo", func() {
 			})
 		})
 
-		Context("With a not found id", func() {
+		Context("With a not existing id", func() {
 			It("should delete nothing", func() {
 
 				if testing.Short() {
@@ -320,7 +320,7 @@ var _ = Describe("Todo", func() {
 
 	Describe("Search", func() {
 		Context("With a good pattern, good tags and good state", func() {
-			It("should find it", func() {
+			It("should return a todo", func() {
 				if testing.Short() {
 					Skip("Skip in short mode (need database access)")
 				}
@@ -355,7 +355,7 @@ var _ = Describe("Todo", func() {
 			})
 		})
 
-		Context("With a pattern, tags and state which don't match", func() {
+		Context("With a pattern, tags and state which doesn't match", func() {
 			It("should find it", func() {
 				if testing.Short() {
 					Skip("Skip in short mode (need database access)")

@@ -21,7 +21,7 @@
 
 * make helps to manage common command lines.
 * go the go module must be activated GO111MODULE=on.
-* docker-compose for the local test.
+* docker-compose for local tests.
 * docker for the containerization.
 * protoc to generate code from protobuff.
 
@@ -30,7 +30,7 @@
 ```sh
 make help
 clean                          clean the target folder
-cover-html                     show the coverage in HTML page
+cover-html                     show the coverage in an HTML page
 docker-compose-build           builds the application image with docker-compose.
 docker-compose-up              spawns the containers.
 fmt                            go fmt
@@ -47,7 +47,7 @@ vet                            go vet on packages
 
 ### Run the unit tests and integration tests
 
-The tests are written in Behavior Driven Development and most of the time in TDD.
+The tests are written in a Behavior Driven Development way and most of the time in TDD.
 
 ```sh
 make tools #install the requirements for the test
@@ -56,7 +56,7 @@ make test
 make it-test
 ```
 
-The integration tests are considerated as non [short test](https://golang.org/pkg/testing/#hdr-Skipping).
+The integration tests are not considered as [short test](https://golang.org/pkg/testing/#hdr-Skipping).
 
 ### Client
 
@@ -109,16 +109,16 @@ The circle ci uses:
 |Factor|Why does it fit|
 |:----------:|:----------:|
 |Codebase|The SCM follows the gitflow pattern. The `master` is for the production, `develop` for the staging. |
-|Dependencies|It uses go mod which manages dependencies and helm and it requirements|
-|Config|The `todod` application can be configurated with environmental variables|
+|Dependencies|It uses go mod which manages dependencies. Same happens with helm where we can spevify the dependencies the requirements.yaml file|
+|Config|The `todod` application can be configured with environment variables|
 |Backing services|The `todod` service has a resource which is the mongo database and configuration with `MONGO_URL`|
 |Build, release, run|Build: docker image, Release: kubernetes|
 |Processes|The `todod` application is stateless|
 |Port binding|The `todod` application use the port 8080|
 |Concurrency|The `todod` application is easy to scale|
-|Disposability|The `todod` application is ready quickly|
-|Dev/Prod parity|With the gitflow pattern, it should reach the goal to have the parity between dev and prod|
-|Logs|The logs are redirected in stdout for the container and in json.|
+|Disposability|If the database is up and ready, the `todod` application will start fast |
+|Dev/Prod parity|The gitflow pattern allows to have the parity between dev and prod|
+|Logs|The logs are redirected in stdout for the container and in a json file.|
 |Admin processes|The adminstrotator can use the metrics from `/metrics` and the logs|
 
 
@@ -126,7 +126,7 @@ The circle ci uses:
 
 * Containerized: The application `todod` is deployed in a container.
 * Dynamically orchestrated: A load-balancer (traefik, nginx, ...) can be used above the services of todod.
-* Microservices-oriented: The `todod` application manages todos
+* Microservices-oriented: The `todod` application manages only todos
 * Statelessness: The `todod` can die. Nothing is lost.
 
 ### How would you expand on this service to allow for the use of an eventstore?
@@ -136,7 +136,7 @@ The circle ci uses:
 
 ### How would this service be accessed and used from an external client from the cluster?
 
-It should use a nodeport, an ingress or a load-balancer.
+Multiple solutions exist : Nodeport, Ingress or a load-balancer.
 
 ## Todos
 
@@ -154,39 +154,18 @@ It should use a nodeport, an ingress or a load-balancer.
 ```bash
 # Install the release
 cd helm
-helm del --purge test;
+helm dep update
 
-# Force delete mongodb
-kubectl patch pvc -n dev test-mongodb -p '{"metadata":{"finalizers":null}}'
-kubectl delete deployments -n dev test-mongodb test-tododg
+export NAME=todo
 
-# Check the application
-kubectl port-forward svc/test-todod 8080:8080 -n dev
-grpc-health-probe -addr localhost:8080  -rpc-timeout 3s -connect-timeout 5s
-grpc-health-probe -addr test-todod.io:443  -rpc-timeout 3s -connect-timeout 5s
+helm install stable/nginx-ingress --name nginx --namespace dev
+helm install --name ${NAME} --namespace dev .
 
 
-openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout tls.key -out tls.crt -subj "/CN=test-todod.io"
-kubectl create secret tls grpc-secret --key tls.key --cert tls.crt -n dev
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /tmp/tls.key -out /tmp/tls.crt -subj "/CN=${NAME}-todod.io"
+kubectl create secret tls ${NAME}-todod-secret --key /tmp/tls.key --cert /tmp/tls.crt  -n dev
 
 
-grpc-health-probe -addr test-todod.io:443 \
-    -tls \
-    -tls-ca-cert tls.crt \
-    -tls-server-name=test-todod.io
-
-kubectl delete deployment -n dev my-nginx-nginx-ingress-controller my-nginx-nginx-ingress-default-backend test-mongodb test-todod
-helm del --purge test
-helm del --purge my-nginx
-
-helm install stable/nginx-ingress --set controller.extraArgs.enable-ssl-passthrough="" --set controller.extraArgs.v="2" --name my-nginx --namespace dev
-helm install --name test --namespace dev .
-
-
-#helm upgrade test --namespace dev .
-
-openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /tmp/tls.key -out /tmp/tls.crt -subj "/CN=test-todod.io"
-kubectl create secret tls foo-secret --key /tmp/tls.key --cert /tmp/tls.crt
 ```
 
 

@@ -9,7 +9,6 @@ deployment:
   containerHTTPPort: 8081
 
 service:
-  type: ClusterIP
   grpcPort: 8080
   httpPort: 8081
 
@@ -18,7 +17,6 @@ mongodb:
   mongodbUsername: devroot
   mongodbPassword: devroot
   mongodbDatabase: challenge
-  mongodbPort: 27
 
 # It uses https://github.com/kubernetes/ingress-nginx, you must have a certificate in {{ template "ws.fullname" . }}-secret
 ingress:

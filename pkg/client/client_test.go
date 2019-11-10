@@ -31,8 +31,8 @@ var _ = Describe("Todo", func() {
 	})
 
 	Describe("Create", func() {
-		Context("With a good todo", func() {
-			It("should create one", func() {
+		Context("With a correct todo payload", func() {
+			It("should create a todo payload", func() {
 				mock.expectedRequest = &pb.CreateRequest{
 					ToDo: &pb.ToDo{
 						Id:          "id",
@@ -85,8 +85,8 @@ var _ = Describe("Todo", func() {
 	})
 
 	Describe("Read", func() {
-		Context("With a todo which exists", func() {
-			It("should get the todo", func() {
+		Context("A todo payload which exists", func() {
+			It("should return it", func() {
 				mock.expectedRequest = &pb.ReadRequest{
 					Id: "id",
 				}
@@ -112,8 +112,8 @@ var _ = Describe("Todo", func() {
 			})
 		})
 
-		Context("With a todo which doesn't exist", func() {
-			It("should get nothing", func() {
+		Context("With a todo payload which doesn't exist", func() {
+			It("should return nothing", func() {
 				mock.expectedRequest = &pb.ReadRequest{
 					Id: "id",
 				}
@@ -139,8 +139,8 @@ var _ = Describe("Todo", func() {
 	})
 
 	Describe("Update", func() {
-		Context("With a good todo which is updated", func() {
-			It("should be true", func() {
+		Context("With a correct todo payload", func() {
+			It("should return true", func() {
 				mock.expectedRequest = &pb.UpdateRequest{
 					ToDo: &pb.ToDo{
 						Id:          "id",
@@ -164,7 +164,7 @@ var _ = Describe("Todo", func() {
 			})
 		})
 
-		Context("With a good todo which is updated", func() {
+		Context("With a non existing todo id", func() {
 			It("should be false", func() {
 				mock.expectedRequest = &pb.UpdateRequest{
 					ToDo: &pb.ToDo{
@@ -217,8 +217,8 @@ var _ = Describe("Todo", func() {
 		})
 	})
 	Describe("Delete", func() {
-		Context("With a good todo which is deleted", func() {
-			It("should be true", func() {
+		Context("With a correct todo payload", func() {
+			It("should return true", func() {
 				mock.expectedRequest = &pb.DeleteRequest{
 					Id: "id",
 				}
@@ -228,7 +228,7 @@ var _ = Describe("Todo", func() {
 			})
 		})
 
-		Context("With a good todo which is updated", func() {
+		Context("With a non existing todo id", func() {
 			It("should be false", func() {
 				mock.expectedRequest = &pb.DeleteRequest{
 					Id: "id",
@@ -254,8 +254,8 @@ var _ = Describe("Todo", func() {
 	})
 
 	Describe("Search", func() {
-		Context("With todos", func() {
-			It("should get the todos", func() {
+		Context("With correct todo payloads", func() {
+			It("should get them", func() {
 				mock.expectedRequest = &pb.SearchRequest{
 					Pattern: "pattern",
 					Tags:    []string{"t1", "t2"},

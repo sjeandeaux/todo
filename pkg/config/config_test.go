@@ -28,20 +28,20 @@ var _ = Describe("Config", func() {
 	})
 
 	Describe("Get the environmental variable", func() {
-		Context("With existing key with text", func() {
-			It("should be a the value with text", func() {
+		Context("With an existing key with text", func() {
+			It("should return the value with text", func() {
 				Ω(LookupEnvOrString("EXISTING_KEY_WITH_TEXT", "DEFAULT_VALUE")).Should(Equal("EXISTING_VALUE"))
 			})
 		})
 
-		Context("With existing key with empty string", func() {
-			It("should be an empty string", func() {
+		Context("With an existing key with empty string", func() {
+			It("should return an empty string", func() {
 				Ω(LookupEnvOrString("EXISTING_KEY_EMPTY_STRING", "DEFAULT_VALUE")).To(Equal(""))
 			})
 		})
 
 		Context("With non-existing key", func() {
-			It("should be the default value", func() {
+			It("should return the default value", func() {
 				Ω(LookupEnvOrString("NON_EXISTING_VALUE", "DEFAULT_VALUE")).Should(Equal("DEFAULT_VALUE"))
 			})
 		})
