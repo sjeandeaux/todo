@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"crypto/tls"
 	"net"
 	"time"
 
@@ -10,12 +11,15 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	grpc "google.golang.org/grpc"
+
+	"google.golang.org/grpc/credentials"
 )
 
 type commandLine struct {
-	logLevel string
-	host     string
-	port     string
+	logLevel  string
+	host      string
+	port      string
+	plaintext bool
 
 	timeout time.Duration
 }
@@ -23,9 +27,23 @@ type commandLine struct {
 //the client on todo manager
 func (c *commandLine) client() (*client.ToDoManager, error) {
 	log.Infof("%s:%s", c.host, c.port)
-	cc, err := grpc.Dial(net.JoinHostPort(c.host, c.port), grpc.WithInsecure(), grpc.WithBalancerName("round_robin"),
+
+	opts := []grpc.DialOption{
 		grpc.WithUnaryInterceptor(grpc_prometheus.UnaryClientInterceptor),
-		grpc.WithStreamInterceptor(grpc_prometheus.StreamClientInterceptor))
+		grpc.WithStreamInterceptor(grpc_prometheus.StreamClientInterceptor),
+		grpc.FailOnNonTempDialError(true),
+	}
+
+	if c.plaintext {
+		opts = append(opts, grpc.WithInsecure())
+	} else {
+		var tlsConf tls.Config
+		tlsConf.InsecureSkipVerify = true
+		transportCredentials := credentials.NewTLS(&tlsConf)
+		opts = append(opts, grpc.WithTransportCredentials(transportCredentials))
+	}
+
+	cc, err := grpc.Dial(net.JoinHostPort(c.host, c.port), opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -53,6 +71,7 @@ func init() {
 	rootCmd.PersistentFlags().StringVarP(&cmdLine.port, "port", "p", "8080", "The port")
 	rootCmd.PersistentFlags().DurationVarP(&cmdLine.timeout, "timeout", "t", 3*time.Second, "The timeout when it calls the daemon")
 	rootCmd.PersistentFlags().StringVarP(&cmdLine.host, "host", "o", "localhost", "The host")
+	rootCmd.PersistentFlags().BoolVarP(&cmdLine.plaintext, "plaintext", "a", false, "The GRPC is plaintext")
 
 	viper.BindPFlag("log-level", rootCmd.PersistentFlags().Lookup("log-level"))
 	viper.BindPFlag("host", rootCmd.PersistentFlags().Lookup("host"))
