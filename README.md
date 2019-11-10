@@ -164,8 +164,6 @@ helm install --name ${NAME} --namespace dev .
 
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /tmp/tls.key -out /tmp/tls.crt -subj "/CN=${NAME}-todod.io"
 kubectl create secret tls ${NAME}-todod-secret --key /tmp/tls.key --cert /tmp/tls.crt  -n dev
-
-
 ```
 
 

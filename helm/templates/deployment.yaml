@@ -29,11 +29,11 @@ spec:
           containerPort: {{ .Values.deployment.containerHTTPPort }}
         readinessProbe:
           exec:
-            command: ["/grpc-health-probe", "-addr=localhost:8080"]
+            command: ["/grpc-health-probe", "-addr=:8080"]
           initialDelaySeconds: 5
         livenessProbe:
           exec:
-            command: ["/grpc-health-probe", "-addr=localhost:8080"]
+            command: ["/grpc-health-probe", "-addr=:8080"]
           initialDelaySeconds: 10
         env:
         - name: MONGO_URL
