@@ -15,7 +15,8 @@
 > The folder `todod` contains the default implementation of todo management based on mongo.
 > The folder `todo-cli` contains the client which calls the daemon **todod**.
 > The folder `pkg` contains the source code.
-> The file `Dockerfile` use the multi-staging to generate an image docker with the binaries (todod and todo-cli)
+> The file `Dockerfile` use the multi-staging to generate an image docker with the binaries (todod and todo-cli).
+> The folder `helm` contains the deployment.
 
 ### Tools
 
@@ -131,21 +132,26 @@ The circle ci uses:
 
 ### How would you expand on this service to allow for the use of an eventstore?
 
-
+It should:
+* use a event source such as Kafka, Pulser or Rabbit MQ.
+* create the events Create, Update and Remove.
+* create a projection which manages the events to be able to query them.
 
 
 ### How would this service be accessed and used from an external client from the cluster?
 
-Multiple solutions exist : Nodeport, Ingress or a load-balancer.
+Multiple solutions exist:
+* Nodeport.
+* Ingress used here.
+* Load-balancer.
 
 ## Todos
 
-- [ ] better documentation in go
-- [ ] better coverage (ex: cli)
-- [ ] use a proxy
-- [ ] to keep it simple see KO to run go project in kubernetes
-- [ ] Kubernates operator instead of helm chart for mongodb
-
+- [ ] better documentation in go.
+- [ ] better coverage (ex: cli).
+- [ ] deployment in CI/CD.
+- [ ] to keep it simple see [KO](https://github.com/google/ko) to run go project in kubernetes.
+- [ ] Kubernates operator instead of helm chart for mongodb.
 
 ### Useful command lines
 
