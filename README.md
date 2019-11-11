@@ -149,9 +149,10 @@ Multiple solutions exist:
 
 - [ ] better documentation in go.
 - [ ] better coverage (ex: cli).
-- [ ] deployment in CI/CD.
+- [ ] deployment in CI/CD, give the version (image) in parameter.
 - [ ] to keep it simple see [KO](https://github.com/google/ko) to run go project in kubernetes.
 - [ ] Kubernates operator instead of helm chart for mongodb.
+- [ ] create release for the client.
 
 ### Useful command lines
 

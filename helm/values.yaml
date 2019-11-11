@@ -1,7 +1,7 @@
 replicaCount: 1
 image:
   repository: sjeandeaux/todo
-  tag: 0.3.0-5-g1904ece
+  tag: 0.4.0
   pullPolicy: Always
 
 deployment:
@@ -11,7 +11,6 @@ deployment:
 service:
   grpcPort: 8080
   httpPort: 8081
-
 
 mongodb:
   mongodbUsername: devroot
